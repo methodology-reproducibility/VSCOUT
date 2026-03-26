@@ -1,10 +1,3 @@
-"""Simulation and ablation framework for VSCOUT.
-
-This module implements a reproducible Monte Carlo benchmark for evaluating
-component contributions within the VSCOUT method across multiple
-data-generating processes (DGPs).
-"""
-
 from __future__ import annotations
 
 import os
