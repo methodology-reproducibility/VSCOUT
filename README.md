@@ -50,32 +50,6 @@ The repository includes implementations used for the simulation study, ablation 
 
 ---
 
-## Reproducibility
-
-All experiments were conducted using fixed random seeds. The scripts are structured so that the main simulation results and figures can be reproduced directly.
-
-Typical workflow:
-
-1. Run ablation study
-
-```
-python ablation_framework.py
-```
-
-2. Run contamination sensitivity experiments
-
-```
-python contamination_sensitivity.py
-```
-
-3. Generate figures
-
-```
-python plot_contamination_sensitivity.py
-```
-
----
-
 ## Requirements
 
 The code was developed in Python 3.10+. Required dependencies are listed in `requirements.txt`.
