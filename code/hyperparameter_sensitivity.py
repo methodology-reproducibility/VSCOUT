@@ -416,46 +416,6 @@ def plot_sensitivity(summary_df: pd.DataFrame, output_path: Path | str) -> None:
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-
-def build_interpretation(summary_df: pd.DataFrame) -> str:
-    overall = (
-        summary_df.groupby(["HyperparameterKey", "Value"])[["F1_mean", "Recall_mean", "FPR_mean"]]
-        .mean()
-        .reset_index()
-    )
-
-    def _subset(key: str) -> pd.DataFrame:
-        spec = next(item for item in HYPERPARAMETERS if item.key == key)
-        ordered_labels = [_setting_value_label(spec, value) for value in spec.values]
-        df = overall[overall["HyperparameterKey"] == key].copy()
-        df["Value"] = pd.Categorical(df["Value"], categories=ordered_labels, ordered=True)
-        return df.sort_values("Value")
-
-    latent_df = _subset("latent_dim")
-    width_df = _subset("hidden_width")
-    alpha_df = _subset("alpha")
-    penalty_df = _subset("penalty")
-    ensemble_df = _subset("flag_rule")
-
-    latent_span = latent_df["F1_mean"].max() - latent_df["F1_mean"].min()
-    width_span = width_df["F1_mean"].max() - width_df["F1_mean"].min()
-
-    alpha_low = alpha_df.iloc[0]
-    alpha_high = alpha_df.iloc[-1]
-    penalty_best = penalty_df.loc[penalty_df["F1_mean"].idxmax(), "Value"]
-    ensemble_best = ensemble_df.loc[ensemble_df["F1_mean"].idxmax(), "Value"]
-
-    return (
-        f"Performance is {'stable' if latent_span < 0.05 and width_span < 0.05 else 'moderately sensitive'} "
-        f"across latent size and hidden-layer width, with mean F1 ranges of {latent_span:.3f} and {width_span:.3f}, respectively. "
-        f"Moving from alpha={alpha_low['Value']} to alpha={alpha_high['Value']} changes mean recall from "
-        f"{alpha_low['Recall_mean']:.3f} to {alpha_high['Recall_mean']:.3f} while FPR shifts from "
-        f"{alpha_low['FPR_mean']:.3f} to {alpha_high['FPR_mean']:.3f}, consistent with more aggressive significance levels increasing sensitivity at some false-positive cost. "
-        f"The best average F1 for the PELT sweep occurs at penalty={penalty_best}, suggesting larger penalties can reduce responsiveness when they become too conservative. "
-        f"Across ensemble rules, the strongest mean F1 occurs for '{ensemble_best}', highlighting that the aggregation rule meaningfully affects overall aggressiveness."
-    )
-
-
 def main() -> None:
     output_dir = Path.cwd()
     results_df = run_hyperparameter_sensitivity(
@@ -474,9 +434,6 @@ def main() -> None:
 
     print("\nSummary:")
     print(summary_df.head(18).to_string(index=False))
-
-    print("\nInterpretation:")
-    print(build_interpretation(summary_df))
 
 
 if __name__ == "__main__":
