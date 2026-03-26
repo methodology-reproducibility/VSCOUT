@@ -387,34 +387,6 @@ def build_latex_table(overall_df: pd.DataFrame) -> str:
     return latex_df.to_latex(index=False, escape=False)
 
 
-def build_interpretation(overall_df: pd.DataFrame) -> str:
-    summary = overall_df.set_index("ThresholdRule")
-    recall_1 = summary.loc["1-of-4", "Recall"]
-    fpr_1 = summary.loc["1-of-4", "FPR"]
-    recall_2 = summary.loc["2-of-4", "Recall"]
-    f1_2 = summary.loc["2-of-4", "F1"]
-    fpr_2 = summary.loc["2-of-4", "FPR"]
-    recall_3 = summary.loc["3-of-4", "Recall"]
-    fpr_3 = summary.loc["3-of-4", "FPR"]
-    best_f1_rule = overall_df.loc[overall_df["F1"].idxmax(), "ThresholdRule"]
-
-    base = (
-        "Across the selected shifted cases, the 1-of-4 rule was the most sensitive, "
-        f"with higher average recall ({recall_1:.3f}) but also the highest false positive rate ({fpr_1:.3f}). "
-        f"The 3-of-4 rule was the most conservative, lowering false positives ({fpr_3:.3f}) at the cost of recall ({recall_3:.3f}). "
-    )
-    if best_f1_rule == "2-of-4":
-        return (
-            base
-            + f"The 2-of-4 rule provided the best overall balance, with mean recall {recall_2:.3f}, "
-            f"mean F1 {f1_2:.3f}, and a materially lower FPR ({fpr_2:.3f}) than 1-of-4."
-        )
-    return (
-        base
-        + f"In this run, {best_f1_rule} attained the highest mean F1, but 2-of-4 still served as the middle-ground rule "
-        f"with recall {recall_2:.3f}, F1 {f1_2:.3f}, and FPR {fpr_2:.3f}."
-    )
-
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -454,8 +426,6 @@ def main() -> None:
     print("\nLaTeX table:")
     print(build_latex_table(overall_df))
 
-    print("\nInterpretation:")
-    print(build_interpretation(overall_df))
 
 
 if __name__ == "__main__":
