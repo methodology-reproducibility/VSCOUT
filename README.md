@@ -10,14 +10,43 @@ The repository includes implementations used for the simulation study, ablation 
 
 **Core Scripts**
 
-* `ablation_framework.py`
-  Runs the ablation study evaluating the contribution of individual components of the proposed framework.
+* `ablation_framework.py`  
+  Runs the ablation experiments used to evaluate the contribution of ARD, changepoint filtering, ensemble detection, refinement, and the full VSCOUT procedure.
 
-* `contamination_sensitivity.py`
-  Conducts experiments across increasing contamination levels.
+* `consensus_threshold_sensitivity.py`  
+  Conducts the sensitivity analysis for alternative final decision rules, comparing 1-of-4, 2-of-4, and 3-of-4 consensus thresholds.
 
-* `plot_contamination_sensitivity.py`
-  Generates the contamination-sensitivity figures reported in the manuscript.
+* `hyperparameter_sensitivity.py`  
+  Runs the hyperparameter sensitivity experiments for latent size, KL threshold, PELT penalty, significance level, ensemble rule, and hidden-layer width.
+
+---
+
+**Experiment Notebooks**
+
+* `Experiments (Synthetic Shifts).ipynb`  
+  Contains the main simulation experiments for retrospective monitoring under synthetic shift scenarios.
+
+* `Experiments (Benchmark Comparison).ipynb`  
+  Provides benchmark comparisons against competing methods across the experimental settings reported in the manuscript.
+
+* `Ablation Study (Sensitivity_to_contamination_Figure).ipynb`  
+  Generates the contamination-sensitivity experiments and corresponding figure showing how performance changes as contamination increases.
+
+* `Ablation Study (Ablation Study Table).py`  
+  Produces the ablation-study summary table reported in the manuscript.
+
+* `Semiconductor.ipynb`  
+  Contains the real-data semiconductor case study and associated analyses.
+
+---
+
+**Reproducibility / Figure Generation**
+
+* `Code to Reproduce Figures.ipynb`  
+  Reproduces the main figures reported in the manuscript.
+
+* `Code to Reproduce Control Charts.ipynb`  
+  Reproduces the control-chart visualizations used in the paper.
 
 ---
 
